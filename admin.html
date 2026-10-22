@@ -1,0 +1,28 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Admin · Time Clock</title><meta name="theme-color" content="#3b8de3"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icons/icon-192.png"><link rel="stylesheet" href="style.css"></head><body class="wide" style="padding-bottom:70px">
+<div class="hd"><b>Admin · Time Sheet Tim</b><button onclick="logout()">Keluar</button></div>
+<div class="pc" id="v1"><div class="wk"><button class="s" data-w="-1">‹</button><b id="kwk"></b><button class="s" data-w="1">›</button></div>
+<select id="fn"><option value="">Semua karyawan</option></select><div class="chips" id="ktot"></div><div class="sc"><table id="kt"></table></div></div>
+<div class="pc" id="v2" style="display:none"><p class="mut">Karyawan mendaftar sendiri dari halaman login. Gunakan Reset sandi bila ada yang lupa.</p><div class="sc"><table id="ut"></table></div></div>
+<nav><button class="on" data-v="v1">Rekap</button><button data-v="v2">Karyawan</button></nav><div id="toast"></div><div id="pr"></div>
+<script src="config.js"></script><script src="common.js"></script><script>
+guard(true);let KW=isoWk(ymd(new Date())),rows=[];
+$$('nav button').forEach(b=>b.onclick=()=>{$$('nav button').forEach(x=>x.classList.toggle('on',x===b));$('#v1').style.display=b.dataset.v==='v1'?'':'none';$('#v2').style.display=b.dataset.v==='v2'?'':'none';if(b.dataset.v==='v2')loadUsers()});
+async function loadRek(){$('#kwk').textContent=wkLabel(KW);$('#kt').innerHTML='<tr><td>Memuat…</td></tr>';
+ try{rows=await call('ts.list',{tahun:KW.y,minggu_ke:KW.w});rows.sort((a,b)=>(a.nama+a.tanggal+a.jam_dari).localeCompare(b.nama+b.tanggal+b.jam_dari));
+  const names=[...new Set(rows.map(r=>r.nama))],cur=$('#fn').value;$('#fn').innerHTML='<option value="">Semua karyawan</option>'+names.map(n=>`<option ${n===cur?'selected':''}>${esc(n)}</option>`).join('');
+  const f=$('#fn').value,v=rows.filter(r=>!f||r.nama===f);
+  $('#ktot').innerHTML=names.filter(n=>!f||n===f).map(n=>`<span>${esc(n)}: ${rows.filter(r=>r.nama===n).reduce((s,r)=>s+(+r.durasi_jam||0),0).toFixed(1)} jam <button class="s" data-p="${esc(n)}">Cetak</button></span>`).join('')||'<span>Belum ada data minggu ini</span>';
+  $('#kt').innerHTML='<tr><th>Nama</th><th>Hari/Tgl</th><th>Jam</th><th>Agenda</th><th>Hasil</th><th>Bukti</th></tr>'+v.map(r=>`<tr><td>${esc(r.nama)}</td><td>${esc(r.hari)} ${shortD(r.tanggal)}</td><td>${esc(r.jam_dari)}–${esc(r.jam_sampai)}<br><span class="mut">${r.durasi_jam} jam</span></td><td>${esc(r.agenda)}</td><td>${esc(r.hasil)}</td><td><div class="th">${thumbs(idsOf(r))}</div></td></tr>`).join('');
+  $$('[data-p]').forEach(b=>b.onclick=()=>cetak(b.dataset.p))
+ }catch(e){$('#kt').innerHTML='<tr><td class="err">Gagal memuat: '+esc(e.message)+'</td></tr>'}}
+$('#fn').onchange=loadRek;$$('#v1 .wk button').forEach(b=>b.onclick=()=>{KW=shift(KW,+b.dataset.w);loadRek()});
+async function loadUsers(){$('#ut').innerHTML='<tr><td>Memuat…</td></tr>';try{const u=await call('ts.users');
+ $('#ut').innerHTML='<tr><th>Nama</th><th>Posisi</th><th>Peran</th><th></th></tr>'+u.map(x=>`<tr><td>${esc(x.nama)}</td><td>${esc(x.posisi)}</td><td>${esc(x.role)}</td><td><button class="s" data-r="${esc(x.nama)}">Reset sandi</button></td></tr>`).join('');
+ $$('[data-r]').forEach(b=>b.onclick=async()=>{const p=prompt('Password baru untuk '+b.dataset.r+' (min. 4 karakter):');if(!p)return;try{await call('ts.resetpw',{target:b.dataset.r,password:p});toast('Sandi diubah')}catch(e){toast(e.message)}})
+}catch(e){$('#ut').innerHTML='<tr><td class="err">'+esc(e.message)+'</td></tr>'}}
+function cetak(n){const v=rows.filter(r=>r.nama===n);let t='';for(let i=0;i<Math.max(22,v.length);i++){const r=v[i]||{};t+=`<tr><td>${r.id?i+1:''}</td><td>${esc(r.hari)}</td><td>${r.tanggal?shortD(r.tanggal):''}</td><td>${esc(r.jam_dari)}</td><td>${esc(r.jam_sampai)}</td><td>${esc(r.agenda)}</td><td>${esc(r.hasil)}</td></tr>`}
+ $('#pr').innerHTML=`<h2 style="text-align:center;font-size:18px">Time Sheet Mingguan Tim</h2><p style="display:flex;justify-content:space-between"><span>Nama: <b>${esc(n)}</b><br>Posisi: ${esc(v[0]?.posisi)}</span><span>Minggu Ke: <b>${KW.w}</b><br>Tahun: ${KW.y}</span></p>
+ <table><tr><th rowspan="2">No</th><th rowspan="2">Hari</th><th rowspan="2">Tanggal</th><th colspan="2">Jam Kerja</th><th rowspan="2">Agenda Kegiatan/Kerja</th><th rowspan="2">Hasil/Keluaran (Kerja/Kegiatan)</th></tr><tr><th>Dari</th><th>Sampai</th></tr>${t}</table>
+ <p style="margin-top:16px">Bandung, ${new Date().toLocaleDateString('id-ID',{day:'numeric',month:'long',year:'numeric'})}</p><div style="display:flex;justify-content:space-between;margin-top:60px"><span>__________________<br>Supervisor</span><span>__________________<br>Founder</span></div>`;window.print()}
+loadRek();
+</script></body></html>
