@@ -1,37 +1,41 @@
-<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Time Clock</title><meta name="theme-color" content="#3b8de3"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icons/icon-192.png"><link rel="stylesheet" href="style.css"></head><body>
-<div class="hd"><span style="width:50px"></span><b>Time Clock</b><button onclick="logout()">Keluar</button></div>
-<div style="height:22px;background:var(--b)"></div>
-<div class="strip"><span id="who"></span><b id="clk"></b></div>
-<div class="hero"><div class="geo"><div class="av" id="av"></div></div></div>
-<div class="sheet"><button class="go" id="go"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="13.5" r="7"/><path d="M12 10v4l2.5 1.5M9.5 3h5M12 3v3.5"/></svg><span id="gl">Mulai kerja</span><small id="gs">00:00:00</small></button>
-<div><span class="pill" id="info"></span></div>
+<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Time Clock</title><meta name="theme-color" content="#3b8de3"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icons/icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="karyawan.css"></head><body>
+<div class="app">
+<div><header class="bar"><span class="sp"></span><h1>Time Clock</h1><button class="ib" onclick="logout()" aria-label="Keluar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg></button></header>
+<section class="info"><div class="av" id="av"></div><div class="nm"><b id="nm"></b><span id="ps"></span></div><time id="clk">00:00:00</time>
+<div class="dt"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M3 10h18M8 2v4M16 2v4"/></svg><span id="dt"></span></div></section></div>
+<div class="mid"><div class="gw"><button class="go" id="go"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="13.5" r="7"/><path d="M12 10v4l2.5 1.5M9.5 3h5M12 3v3.5"/></svg><span id="gl">Mulai kerja</span><small id="gs">00:00:00</small></button><span class="pulse"></span><div class="chip" id="info"><i></i><span id="it"></span></div></div></div>
 <div class="tiles"><button class="tile" id="t1"><i class="ia"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></svg></i>Isi agenda & bukti</button>
-<button class="tile" id="t2"><i class="ib"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 9h18M8 14h3"/></svg></i>Timesheet saya</button></div></div>
-<section class="pg" id="pf"><div class="hd"><button data-x="pf">‹ Kembali</button><b id="ft">Agenda & bukti</b><span style="width:70px"></span></div><div class="pc">
-<p class="mut" id="hint"></p><label>Tanggal</label><input id="tgl" type="date"><div class="row"><div><label>Jam dari</label><input id="dari" type="time"></div><div><label>Jam sampai</label><input id="sampai" type="time"></div></div>
-<label>Agenda kegiatan / kerja</label><textarea id="agenda"></textarea><label>Hasil / keluaran</label><textarea id="hasil"></textarea>
-<label>Foto bukti (hasil kerja / struk belanja)</label><input id="foto" type="file" accept="image/*" multiple><div class="th" id="pv"></div>
-<p class="err" id="er"></p><button class="p" id="simpan">Simpan</button></div></section>
-<section class="pg" id="pw"><div class="hd"><button data-x="pw">‹ Kembali</button><b>Timesheet saya</b><span style="width:70px"></span></div><div class="pc">
-<div class="wk"><button class="s" data-w="-1">‹</button><b id="rwk"></b><button class="s" data-w="1">›</button></div><div class="chips" id="rtot"></div><div id="rl"></div></div></section>
+<button class="tile" id="t2"><i class="ib2"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 9h18M8 14h3"/></svg></i>Timesheet saya</button></div></div>
+<section class="pg" id="pf"><header class="bar"><button class="ib" data-x="pf" aria-label="Kembali"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button><h1 id="ft">Agenda & bukti</h1><span class="sp"></span></header><div class="pc">
+<p class="mut" id="hint"></p><div class="tf fl"><input id="tgl" type="date"><label>Tanggal</label></div>
+<div class="row"><div class="tf fl"><input id="dari" type="time"><label>Jam dari</label></div><div class="tf fl"><input id="sampai" type="time"><label>Jam sampai</label></div></div>
+<div class="tf"><textarea id="agenda" placeholder=" "></textarea><label>Agenda kegiatan / kerja</label></div><div class="tf"><textarea id="hasil" placeholder=" "></textarea><label>Hasil / keluaran</label></div>
+<label class="btn s add"><input id="foto" type="file" accept="image/*" multiple hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>Tambah foto bukti</label><div class="th" id="pv"></div>
+<p class="err" id="er"></p><button class="btn p" id="simpan">Simpan</button></div></section>
+<section class="pg" id="pw"><header class="bar"><button class="ib" data-x="pw" aria-label="Kembali"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button><h1>Timesheet saya</h1><span class="sp"></span></header><div class="pc">
+<div class="wk"><button class="ib" data-w="-1" aria-label="Minggu lalu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></button><b id="rwk"></b><button class="ib" data-w="1" aria-label="Minggu depan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></button></div><div class="chips" id="rtot"></div><div id="rl"></div></div></section>
 <div id="toast"></div><script src="config.js"></script><script src="common.js"></script><script>
 const U=guard(false);let edit=null,fotos=[],hapus=[],RW=isoWk(ymd(new Date())),rows=[];
 const run=()=>JSON.parse(localStorage.getItem('ts_run')||'null'),pend=()=>JSON.parse(localStorage.getItem('ts_pend')||'null');
-$('#who').textContent=U.nama+(U.posisi?' › '+U.posisi:'');$('#av').textContent=U.nama[0].toUpperCase();
-function tick(){const n=new Date();$('#clk').textContent=hm(n);const r=run();if(r){const s=Math.floor((n-r.start)/1000);$('#gs').textContent=[s/3600|0,s/60%60|0,s%60].map(x=>String(x).padStart(2,'0')).join(':')}}
-function paint(){const r=run();$('#go').classList.toggle('on',!!r);$('#gl').textContent=r?'Selesai':'Mulai kerja';$('#gs').style.display=r?'block':'none';
- $('#info').textContent=r?'Bekerja sejak '+hm(new Date(r.start)):pend()?'Sesi selesai, agenda belum diisi':'Belum mulai';tick()}
+$('#nm').textContent=U.nama;$('#ps').textContent=U.posisi||'Karyawan';$('#av').textContent=U.nama[0].toUpperCase();
+document.addEventListener('pointerdown',e=>{const b=e.target.closest('.go,.tile,.btn,.ib');if(!b)return;const r=b.getBoundingClientRect(),s=Math.max(r.width,r.height),d=document.createElement('span');d.className='rip';d.style.cssText=`width:${s}px;height:${s}px;left:${e.clientX-r.left-s/2}px;top:${e.clientY-r.top-s/2}px`;b.appendChild(d);setTimeout(()=>d.remove(),600)});
+const p2=x=>String(x).padStart(2,'0');
+function tick(){const n=new Date();$('#clk').textContent=n.toTimeString().slice(0,8);$('#dt').textContent=n.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+ const r=run();if(r){const s=Math.floor((n-r.start)/1000);$('#gs').textContent=[s/3600|0,s/60%60|0,s%60].map(p2).join(':')}}
+function paint(){const r=run();$('#go').classList.toggle('on',!!r);$('#gl').textContent=r?'Selesai':'Mulai kerja';$('#info').classList.toggle('on',!!r);
+ $('#it').textContent=r?'Bekerja sejak '+hm(new Date(r.start)):pend()?'Sesi selesai, agenda belum diisi':'Belum mulai';tick()}
 $('#go').onclick=()=>{const r=run();
  if(!r){if(pend()&&!confirm('Sesi sebelumnya belum disimpan. Mulai sesi baru dan buang yang lama?'))return;localStorage.removeItem('ts_pend');localStorage.setItem('ts_run',JSON.stringify({start:Date.now()}));paint();return}
  const a=new Date(r.start),b=new Date();localStorage.removeItem('ts_run');localStorage.setItem('ts_pend',JSON.stringify({tanggal:ymd(a),dari:hm(a),sampai:ymd(a)===ymd(b)?hm(b):'23:59'}));paint();openForm()};
-const open=id=>$('#'+id).classList.add('on');$$('[data-x]').forEach(b=>b.onclick=()=>$('#'+b.dataset.x).classList.remove('on'));
+const show=id=>$('#'+id).classList.add('on');$$('[data-x]').forEach(b=>b.onclick=()=>$('#'+b.dataset.x).classList.remove('on'));
 function pv(old=[]){$('#pv').innerHTML=old.map(i=>`<div class="x"><img src="https://drive.google.com/thumbnail?id=${i}&sz=w200"><i data-o="${i}">×</i></div>`).join('')+fotos.map((f,n)=>`<div class="x"><img src="${f.src}"><i data-n="${n}">×</i></div>`).join('');
  $$('#pv i').forEach(x=>x.onclick=()=>{if(x.dataset.o){hapus.push(x.dataset.o);edit.sisa=edit.sisa.filter(z=>z!==x.dataset.o)}else fotos.splice(+x.dataset.n,1);pv(edit?edit.sisa:[])})}
 $('#foto').onchange=async e=>{for(const f of e.target.files)fotos.push(await shrink(f));e.target.value='';pv(edit?edit.sisa:[])};
 function openForm(r){edit=r?{id:r.id,sisa:idsOf(r)}:null;fotos=[];hapus=[];const p=pend();$('#er').textContent='';
  $('#tgl').value=r?r.tanggal:p?p.tanggal:ymd(new Date());$('#dari').value=r?r.jam_dari:p?p.dari:'';$('#sampai').value=r?r.jam_sampai:p?p.sampai:'';
  $('#agenda').value=r?r.agenda:'';$('#hasil').value=r?r.hasil:'';$('#ft').textContent=r?'Ubah kegiatan':'Agenda & bukti';
- $('#hint').textContent=r?'':p?'Jam terisi otomatis dari tombol waktu.':'Belum ada sesi berjalan, jam bisa diisi manual.';pv(edit?edit.sisa:[]);open('pf')}
+ $('#hint').textContent=r?'':p?'Jam terisi otomatis dari tombol waktu.':'Belum ada sesi berjalan, jam bisa diisi manual.';pv(edit?edit.sisa:[]);show('pf')}
 $('#t1').onclick=()=>openForm();
 $('#simpan').onclick=async()=>{const b=$('#simpan'),p={posisi:U.posisi,tanggal:$('#tgl').value,jam_dari:$('#dari').value,jam_sampai:$('#sampai').value,agenda:$('#agenda').value.trim(),hasil:$('#hasil').value.trim(),photos:fotos.map(f=>({mime:f.mime,data:f.data}))};
  if(!p.tanggal||!p.jam_dari||!p.jam_sampai||!p.agenda){$('#er').textContent='Tanggal, jam, dan agenda wajib diisi.';return}
@@ -42,11 +46,11 @@ $('#simpan').onclick=async()=>{const b=$('#simpan'),p={posisi:U.posisi,tanggal:$
 async function loadRiw(){$('#rwk').textContent=wkLabel(RW);$('#rl').innerHTML='<p class="mut">Memuat…</p>';
  try{rows=await call('ts.list',{tahun:RW.y,minggu_ke:RW.w});rows.sort((a,b)=>(a.tanggal+a.jam_dari).localeCompare(b.tanggal+b.jam_dari));
   $('#rtot').innerHTML=`<span>Total ${rows.reduce((s,r)=>s+(+r.durasi_jam||0),0).toFixed(1)} jam</span><span>${rows.length} kegiatan</span>`;
-  $('#rl').innerHTML=rows.length?rows.map(r=>`<div class="card"><b>${esc(r.hari)}, ${shortD(r.tanggal)}</b> <span class="mut">${esc(r.jam_dari)}–${esc(r.jam_sampai)} (${r.durasi_jam} jam)</span><div>${esc(r.agenda)}</div><div class="mut">${esc(r.hasil)}</div><div class="th">${thumbs(idsOf(r))}</div><div style="margin-top:8px;display:flex;gap:8px"><button class="s" data-e="${r.id}">Ubah</button><button class="s" data-d="${r.id}">Hapus</button></div></div>`).join(''):'<p class="mut">Belum ada kegiatan minggu ini.</p>';
+  $('#rl').innerHTML=rows.length?rows.map(r=>`<div class="card"><b>${esc(r.hari)}, ${shortD(r.tanggal)}</b> <span class="mut">${esc(r.jam_dari)}–${esc(r.jam_sampai)} (${r.durasi_jam} jam)</span><div>${esc(r.agenda)}</div><div class="mut">${esc(r.hasil)}</div><div class="th">${thumbs(idsOf(r))}</div><div style="margin-top:10px;display:flex;gap:8px"><button class="btn s" data-e="${r.id}">Ubah</button><button class="btn s" data-d="${r.id}">Hapus</button></div></div>`).join(''):'<p class="mut">Belum ada kegiatan minggu ini.</p>';
   $$('[data-e]').forEach(b=>b.onclick=()=>openForm(rows.find(x=>x.id===b.dataset.e)));
   $$('[data-d]').forEach(b=>b.onclick=async()=>{if(confirm('Hapus kegiatan ini?')){try{await call('ts.delete',{id:b.dataset.d});toast('Dihapus');loadRiw()}catch(e){toast(e.message)}}})
  }catch(e){$('#rl').innerHTML='<p class="err">Gagal memuat: '+esc(e.message)+'</p>'}}
-$('#t2').onclick=()=>{open('pw');loadRiw()};
+$('#t2').onclick=()=>{show('pw');loadRiw()};
 $$('#pw .wk button').forEach(b=>b.onclick=()=>{RW=shift(RW,+b.dataset.w);loadRiw()});
 paint();setInterval(tick,1000);
 </script></body></html>
