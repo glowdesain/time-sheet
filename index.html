@@ -6,7 +6,7 @@
 <script src="config.js"></script><script src="common.js"></script><script>
 const u0=S.get();if(u0)location.replace(u0.role==='admin'?'admin.html':'karyawan.html');
 let reg=false;
-$('#sw').onclick=()=>{reg=!reg;$('#jd').textContent=reg?'Daftar':'Masuk';$('#go').textContent=reg?'Daftar':'Masuk';$('#dx').style.display=$('#dy').style.display=reg?'block':'none';$('#sw').textContent=reg?'Sudah punya akun? Masuk':'Belum punya akun? Daftar';$('#sub').textContent=reg?'Silahkan lengkapi form berikut.':'Time Sheet Tim · Cible & Numa_HDe';$('#er').textContent=''};
+$('#sw').onclick=()=>{reg=!reg;$('#jd').textContent=reg?'Daftar':'Masuk';$('#go').textContent=reg?'Daftar':'Masuk';$('#dx').style.display=$('#dy').style.display=reg?'block':'none';$('#sw').textContent=reg?'Sudah punya akun? Masuk':'Belum punya akun? Daftar';$('#sub').textContent=reg?'Pemilik: daftar dengan nama "admin".':'Time Sheet Tim · Cible & Numa_HDe';$('#er').textContent=''};
 $('#go').onclick=async()=>{const p={nama:$('#nama').value.trim(),password:$('#pw').value,posisi:$('#posisi').value.trim()};const e=$('#er');e.textContent='';
  if(!p.nama||!p.password){e.textContent='Nama dan password wajib diisi.';return}
  if(reg&&p.password!==$('#pw2').value){e.textContent='Password tidak sama.';return}

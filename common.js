@@ -9,7 +9,7 @@ function toast(t){const e=$('#toast');e.textContent=t;e.style.display='block';se
 const ymd=d=>d.toLocaleDateString('sv'),hm=d=>d.toTimeString().slice(0,5);
 function isoWk(s){const d=new Date(s+'T00:00:00Z');d.setUTCDate(d.getUTCDate()-((d.getUTCDay()+6)%7)+3);const y=d.getUTCFullYear(),j=new Date(Date.UTC(y,0,4));return{y,w:1+Math.round(((d-j)/864e5-3+((j.getUTCDay()+6)%7))/7)}}
 function mon(y,w){const j=new Date(Date.UTC(y,0,4));j.setUTCDate(j.getUTCDate()-(j.getUTCDay()||7)+1+(w-1)*7);return j}
-const iso=d=>d.toISOString().slice(0,10),shortD=s=>new Date(s+'T00:00:00Z').toLocaleDateString('id-ID',{day:'numeric',month:'short',timeZone:'UTC'});
+const iso=d=>d.toISOString().slice(0,10),shortD=s=>new Date(String(s).slice(0,10)+'T00:00:00Z').toLocaleDateString('id-ID',{day:'numeric',month:'short',timeZone:'UTC'});
 const wkLabel=W=>{const m=mon(W.y,W.w),e=new Date(m.getTime()+6*864e5);return `Minggu ${W.w}, ${W.y} · ${shortD(iso(m))} – ${shortD(iso(e))}`};
 const shift=(W,n)=>isoWk(iso(new Date(mon(W.y,W.w).getTime()+n*7*864e5)));
 const idsOf=r=>String(r.bukti_id||'').split(',').filter(Boolean);
