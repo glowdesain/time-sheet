@@ -41,6 +41,9 @@ body{margin:0;background:var(--bg);color:var(--ink);font:400 15px/1.5 Roboto,sys
 .card{background:#fff;border-radius:16px;padding:14px;margin:12px 0;box-shadow:var(--e1);border-left:4px solid var(--t);animation:up .35s both;transition:box-shadow .2s}.card:hover{box-shadow:var(--e2)}.card b{font-weight:700}
 #toast{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:#2b3642;color:#fff;padding:12px 20px;border-radius:8px;display:none;z-index:99;box-shadow:var(--e2);animation:up .25s both}
 .rip{position:absolute;border-radius:50%;background:#ffffff59;transform:scale(0);animation:rip .6s ease-out;pointer-events:none}.tile .rip,.s .rip,.wk .rip{background:#3b8de333}
+
+.seg{display:flex;border:1px solid #74808f;border-radius:20px;overflow:hidden;margin:8px 0}.seg button{flex:1;border:0;background:#fff;padding:9px 4px;font:500 14px Roboto,system-ui;color:var(--ink);cursor:pointer;transition:background .2s,color .2s}.seg button+button{border-left:1px solid #74808f}.seg button:hover{background:#e3eefc}.seg button.on{background:#d3e4fa;color:var(--b2)}
+table{width:100%;border-collapse:collapse;background:#fff;font-size:13px;border-radius:12px;overflow:hidden;box-shadow:var(--e1);margin:8px 0}td,th{padding:9px 8px;border-bottom:1px solid var(--line);text-align:left}th{background:#e3eefc;color:var(--b2);font-weight:500}.sc{overflow-x:auto}tr.dg{cursor:pointer;transition:background .15s}tr.dg:hover{background:#eef5fd}
 @keyframes rip{to{transform:scale(2.6);opacity:0}}@keyframes up{from{opacity:0;transform:translateY(14px)}}@keyframes pop{from{opacity:0;transform:scale(.8)}}
 @keyframes pulse{0%{transform:scale(1);opacity:.55}100%{transform:scale(1.4);opacity:0}}@keyframes dot{50%{opacity:.35}}
 @media (max-height:620px){.mid{position:static;padding:30px 0 84px}.app{justify-content:flex-start}}

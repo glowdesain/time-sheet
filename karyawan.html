@@ -14,13 +14,13 @@
 <label class="btn s add"><input id="foto" type="file" accept="image/*" multiple hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>Tambah foto bukti</label><div class="th" id="pv"></div>
 <p class="err" id="er"></p><button class="btn p" id="simpan">Simpan</button></div></section>
 <section class="pg" id="pw"><header class="bar"><button class="ib" data-x="pw" aria-label="Kembali"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button><h1>Timesheet saya</h1><span class="sp"></span></header><div class="pc">
-<div class="wk"><button class="ib" data-w="-1" aria-label="Minggu lalu"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></button><b id="rwk"></b><button class="ib" data-w="1" aria-label="Minggu depan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></button></div><div class="chips" id="rtot"></div><div id="rl"></div></div></section>
+<div class="seg" id="sg"><button data-m="w" class="on">Mingguan</button><button data-m="m">Bulanan</button><button data-m="y">Tahunan</button></div>
+<div class="wk"><button class="ib" data-w="-1" aria-label="Sebelumnya"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg></button><b id="rwk"></b><button class="ib" data-w="1" aria-label="Berikutnya"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg></button></div><div class="chips" id="rtot"></div><div id="bd"></div><div id="rl"></div></div></section>
 <div id="toast"></div><script src="config.js"></script><script src="common.js"></script><script>
-const U=guard(false);let edit=null,fotos=[],hapus=[],RW=isoWk(ymd(new Date())),rows=[];
+const U=guard(false);let edit=null,fotos=[],hapus=[],RM='w',RA=ymd(new Date()),rows=[];
 const run=()=>JSON.parse(localStorage.getItem('ts_run')||'null'),pend=()=>JSON.parse(localStorage.getItem('ts_pend')||'null');
 $('#nm').textContent=U.nama;$('#ps').textContent=U.posisi||'Karyawan';$('#av').textContent=U.nama[0].toUpperCase();
 document.addEventListener('pointerdown',e=>{const b=e.target.closest('.go,.tile,.btn,.ib');if(!b)return;const r=b.getBoundingClientRect(),s=Math.max(r.width,r.height),d=document.createElement('span');d.className='rip';d.style.cssText=`width:${s}px;height:${s}px;left:${e.clientX-r.left-s/2}px;top:${e.clientY-r.top-s/2}px`;b.appendChild(d);setTimeout(()=>d.remove(),600)});
-const p2=x=>String(x).padStart(2,'0');
 function tick(){const n=new Date();$('#clk').textContent=n.toTimeString().slice(0,8);$('#dt').textContent=n.toLocaleDateString('id-ID',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
  const r=run();if(r){const s=Math.floor((n-r.start)/1000);$('#gs').textContent=[s/3600|0,s/60%60|0,s%60].map(p2).join(':')}}
 function paint(){const r=run();$('#go').classList.toggle('on',!!r);$('#gl').textContent=r?'Selesai':'Mulai kerja';$('#info').classList.toggle('on',!!r);
@@ -43,14 +43,18 @@ $('#simpan').onclick=async()=>{const b=$('#simpan'),p={posisi:U.posisi,tanggal:$
  try{if(edit){p.id=edit.id;p.remove_ids=hapus;await call('ts.update',p)}else await call('ts.add',p);
   if(!edit)localStorage.removeItem('ts_pend');paint();$('#pf').classList.remove('on');toast('Tersimpan');if($('#pw').classList.contains('on'))loadRiw()}
  catch(e){$('#er').textContent='Gagal: '+e.message+'. Isi form masih ada, coba lagi.'}b.disabled=false;b.textContent='Simpan'};
-async function loadRiw(){$('#rwk').textContent=wkLabel(RW);$('#rl').innerHTML='<p class="mut">Memuat…</p>';
- try{rows=await call('ts.list',{tahun:RW.y,minggu_ke:RW.w});rows.sort((a,b)=>(a.tanggal+a.jam_dari).localeCompare(b.tanggal+b.jam_dari));
-  $('#rtot').innerHTML=`<span>Total ${rows.reduce((s,r)=>s+(+r.durasi_jam||0),0).toFixed(1)} jam</span><span>${rows.length} kegiatan</span>`;
-  $('#rl').innerHTML=rows.length?rows.map(r=>`<div class="card"><b>${esc(r.hari)}, ${shortD(r.tanggal)}</b> <span class="mut">${esc(r.jam_dari)}–${esc(r.jam_sampai)} (${r.durasi_jam} jam)</span><div>${esc(r.agenda)}</div><div class="mut">${esc(r.hasil)}</div><div class="th">${thumbs(idsOf(r))}</div><div style="margin-top:10px;display:flex;gap:8px"><button class="btn s" data-e="${r.id}">Ubah</button><button class="btn s" data-d="${r.id}">Hapus</button></div></div>`).join(''):'<p class="mut">Belum ada kegiatan minggu ini.</p>';
+const card=r=>`<div class="card"><b>${esc(r.hari)}, ${shortD(r.tanggal)}</b> <span class="mut">${esc(r.jam_dari)}–${esc(r.jam_sampai)} (${r.durasi_jam} jam)</span><div>${esc(r.agenda)}</div><div class="mut">${esc(r.hasil)}</div><div class="th">${thumbs(idsOf(r))}</div><div style="margin-top:10px;display:flex;gap:8px"><button class="btn s" data-e="${r.id}">Ubah</button><button class="btn s" data-d="${r.id}">Hapus</button></div></div>`;
+async function loadRiw(){const R=pRange(RM,RA);$('#rwk').textContent=R.label;$$('#sg button').forEach(b=>b.classList.toggle('on',b.dataset.m===RM));$('#rl').innerHTML='<p class="mut">Memuat…</p>';$('#bd').innerHTML='';
+ try{rows=await loadPeriode(RM,RA);const A=agg(rows);
+  $('#rtot').innerHTML=`<span>Total ${A.jam.toFixed(1)} jam</span><span>${A.n} kegiatan</span><span>${A.hari} hari kerja</span><span>Rata-rata ${(A.hari?A.jam/A.hari:0).toFixed(1)} jam/hari</span>`;
+  if(RM!=='w'&&rows.length)$('#bd').innerHTML=breakdown(RM,rows);
+  $('#rl').innerHTML=RM==='y'?'':rows.length?rows.map(card).join(''):'<p class="mut">Belum ada kegiatan pada periode ini.</p>';
+  bindDrill((m,a)=>{RM=m;RA=a;loadRiw()});
   $$('[data-e]').forEach(b=>b.onclick=()=>openForm(rows.find(x=>x.id===b.dataset.e)));
   $$('[data-d]').forEach(b=>b.onclick=async()=>{if(confirm('Hapus kegiatan ini?')){try{await call('ts.delete',{id:b.dataset.d});toast('Dihapus');loadRiw()}catch(e){toast(e.message)}}})
  }catch(e){$('#rl').innerHTML='<p class="err">Gagal memuat: '+esc(e.message)+'</p>'}}
 $('#t2').onclick=()=>{show('pw');loadRiw()};
-$$('#pw .wk button').forEach(b=>b.onclick=()=>{RW=shift(RW,+b.dataset.w);loadRiw()});
+$$('#sg button').forEach(b=>b.onclick=()=>{RM=b.dataset.m;loadRiw()});
+$$('#pw .wk button').forEach(b=>b.onclick=()=>{RA=pMove(RM,RA,+b.dataset.w);loadRiw()});
 paint();setInterval(tick,1000);
 </script></body></html>
